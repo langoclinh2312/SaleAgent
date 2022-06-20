@@ -2,12 +2,8 @@
 
 namespace AHT\SaleAgent\Block\Account\Dashboard;
 
-class ProductAssigned extends \Magento\Framework\View\Element\Template
+class OrderSaleAgent extends \Magento\Framework\View\Element\Template
 {
-    /**
-     * Limit of orders
-     */
-    const PRODUCT_LIMIT = 5;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
@@ -25,6 +21,21 @@ class ProductAssigned extends \Magento\Framework\View\Element\Template
     private $_priceCurrency;
 
     /**
+     * @param \AHT\SaleAgent\Model\ResourceModel\SaleAgent\Collection
+     */
+    private $dataCollection;
+
+    /**
+     * @param \Magento\Catalog\Model\ProductRepository
+     */
+    private $_productRepository;
+
+    /**
+     * @param \Magento\Customer\Model\CustomerRegistry
+     */
+    private $_customerRegistry;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
      */
@@ -33,14 +44,20 @@ class ProductAssigned extends \Magento\Framework\View\Element\Template
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \AHT\SaleAgent\Model\ResourceModel\SaleAgent\CollectionFactory $saleAgentCollection,
+        \Magento\Catalog\Model\ProductRepository $productRepository,
+        \Magento\Customer\Model\CustomerRegistry $customerRegistry,
         array $data = []
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_customerSession = $customerSession;
         $this->_priceCurrency = $priceCurrency;
+        $this->dataCollection = $saleAgentCollection;
+        $this->_productRepository = $productRepository;
+        $this->_customerRegistry = $customerRegistry;
         parent::__construct($context, $data);
         $this->getProductAgent();
-        $this->pageConfig->getTitle()->set(__('My Product Sale Agent'));
+        $this->getSaleAgent();
     }
 
     /**
@@ -53,11 +70,24 @@ class ProductAssigned extends \Magento\Framework\View\Element\Template
         )->addAttributeToFilter(
             'sale_agent_id',
             $this->_customerSession->getCustomerId()
-        )->setOrder(
+        )->addAttributeToSort(
             'created_at',
             'desc'
-        );
+        )->load();
         $this->setProAgent($productAgents);
+    }
+
+    /**
+     * Get recently placed sale agent.
+     */
+    private function getSaleAgent()
+    {
+        $saleAgentCollection = $this->dataCollection->create()
+            ->addFieldToFilter(
+                'entity_id',
+                $this->_customerSession->getCustomerId()
+            )->load();
+        $this->setAgent($saleAgentCollection);
     }
 
     /**
@@ -66,15 +96,14 @@ class ProductAssigned extends \Magento\Framework\View\Element\Template
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        if ($this->getProAgent()) {
+        if ($this->getAgent()) {
             $pager = $this->getLayout()->createBlock(
                 \Magento\Theme\Block\Html\Pager::class,
                 'saleagent.product.index.pager'
             )->setCollection(
-                $this->getProAgent()
+                $this->getAgent()
             );
             $this->setChild('pager', $pager);
-            $this->getProAgent()->load();
         }
         return $this;
     }
@@ -87,6 +116,18 @@ class ProductAssigned extends \Magento\Framework\View\Element\Template
     public function getPagerHtml()
     {
         return $this->getChildHtml('pager');
+    }
+
+    /**
+     * Function getProduct
+     *
+     * @param string $sku
+     *
+     * @return object
+     */
+    public function getProduct($sku)
+    {
+        return $this->_productRepository->get($sku);
     }
 
     /**
@@ -110,8 +151,8 @@ class ProductAssigned extends \Magento\Framework\View\Element\Template
      */
     function getFormatedPercent($commissionValue, $productPrice)
     {
-        $price = ($productPrice * $commissionValue) / 100;
-        $priceFormat = number_format($commissionValue, 1) . '% =>' . $this->getFormatedPrice($price);
+        $price = $productPrice * $commissionValue / 100;
+        $priceFormat = number_format($commissionValue, 1) . '% => ' . $this->getFormatedPrice($price);
         return $priceFormat;
     }
 
@@ -120,7 +161,7 @@ class ProductAssigned extends \Magento\Framework\View\Element\Template
      *
      * @param float $price
      *
-     * @return string
+     * @return boolean
      */
     function checkTypeCommission($commissionType)
     {
@@ -129,5 +170,17 @@ class ProductAssigned extends \Magento\Framework\View\Element\Template
         } else {
             return false;
         }
+    }
+
+    /**
+     * Function exchangePercent
+     *
+     * @param float $price
+     *
+     * @return float|null
+     */
+    function convertQty($qty)
+    {
+        return intval($qty);
     }
 }

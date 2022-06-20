@@ -1,6 +1,6 @@
 <?php
 
-namespace AHT\SaleAgent\Controller\Product;
+namespace AHT\SaleAgent\Controller\Order;
 
 class Index extends \Magento\Framework\App\Action\Action
 {
@@ -26,10 +26,9 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        return $this->_pageFactory->create();
         /** @var \Magento\Framework\View\Result\PageFactory $_pageFactory */
         $resultPage = $this->_pageFactory->create();
-        $resultPage->getConfig()->getTitle()->set(__('My Product Sale Agent'));
+        $resultPage->getConfig()->getTitle()->set(__('My Sale Agent'));
 
         $block = $resultPage->getLayout()->getBlock('customer.account.link.back');
         if ($block) {

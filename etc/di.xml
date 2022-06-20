@@ -4,12 +4,12 @@
     <preference for="AHT\SaleAgent\Api\Data\SaleAgentInterface" type="AHT\SaleAgent\Model\SaleAgent"/>
     <preference for="AHT\SaleAgent\Api\Data\SaleAgentSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
     <preference for="Magento\Theme\Block\Html\Header" type="AHT\SaleAgent\Block\Html\Header"/>
-    <virtualType name="AHT\SaleAgent\Model\ResourceModel\SaleAgent\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <type name="AHT\SaleAgent\Model\ResourceModel\SaleAgent\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">aht_saleagent_saleagent</argument>
             <argument name="resourceModel" xsi:type="string">AHT\SaleAgent\Model\ResourceModel\SaleAgent\Collection</argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">

@@ -27,7 +27,7 @@
         <aclResource>AHT_SaleAgent::sale_agent_product</aclResource>
         <dataProvider class="AHT\SaleAgent\Ui\Component\DataProvider" name="saleagent_product_listing_data_source">
             <settings>
-                <requestFieldName>id</requestFieldName>
+                <requestFieldName>saleagent_id</requestFieldName>
                 <primaryFieldName>saleagent_id</primaryFieldName>
             </settings>
         </dataProvider>
@@ -37,6 +37,18 @@
             <sticky>true</sticky>
         </settings>
         <filterSearch name="fulltext"/>
+        <filters name="listing_filters">
+            <settings>
+                <templates>
+                    <filters>
+                        <select>
+                            <param name="template" xsi:type="string">ui/grid/filters/elements/ui-select</param>
+                            <param name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</param>
+                        </select>
+                    </filters>
+                </templates>
+            </settings>
+        </filters>
         <massaction name="listing_massaction">
             <action name="delete">
                 <settings>
@@ -58,47 +70,46 @@
                 <indexField>saleagent_id</indexField>
             </settings>
         </selectionsColumn>
-        <column name="saleagent_id">
-            <settings>
-                <sorting>asc</sorting>
-                <label translate="true">ID</label>
-            </settings>
-        </column>
         <column name="entity_id" class="AHT\SaleAgent\Ui\Component\Listing\Column\CustomerName">
             <settings>
-                <label translate="true">Customer</label>
+                <label translate="true">Sale Agent</label>
             </settings>
         </column>
-        <column name="order_id">
+        <column name="name">
             <settings>
-                <label translate="true">Order Id</label>
-            </settings>
-        </column>
-        <column name="order_item_id" class="AHT\SaleAgent\Ui\Component\Listing\Column\OrderItemName">
-            <settings>
-                <label translate="true">Order_item_name</label>
+                <filter>text</filter>
+                <label translate="true">Product Name</label>
             </settings>
         </column>
         <column name="order_item_sku">
             <settings>
                 <filter>text</filter>
-                <label translate="true">Order_item_sku</label>
+                <label translate="true">Product SKU</label>
             </settings>
         </column>
-        <column name="order_item_price">
+        <column name="order_item_price" class="AHT\SaleAgent\Ui\Component\Listing\Column\Fomat">
             <settings>
-                <label translate="true">Order_item_price</label>
+                <label translate="true">Product Price</label>
             </settings>
         </column>
         <column name="commision_type">
             <settings>
-                <filter>text</filter>
-                <label translate="true">Commision_type</label>
+                <label translate="true">Commision Type</label>
             </settings>
         </column>
-        <column name="commission_value">
+        <column name="commission_value" class="AHT\SaleAgent\Ui\Component\Listing\Column\Fomat">
             <settings>
-                <label translate="true">Commission_value</label>
+                <label translate="true">Commission Value</label>
+            </settings>
+        </column>
+        <column name="qty">
+            <settings>
+                <label translate="true">Product Qty</label>
+            </settings>
+        </column>
+        <column name="total" class="AHT\SaleAgent\Ui\Component\Listing\Column\Fomat">
+            <settings>
+                <label translate="true">Total Commission</label>
             </settings>
         </column>
         <actionsColumn name="actions" class="AHT\SaleAgent\Ui\Component\Listing\Column\SaleAgentActions">
@@ -110,15 +121,3 @@
         </actionsColumn>
     </columns>
 </listing>
-<!-- <filters name="listing_filters">
-    <settings>
-        <templates>
-            <filters>
-                <select>
-                    <param name="template" xsi:type="string">ui/grid/filters/elements/ui-select</param>
-                    <param name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</param>
-                </select>
-            </filters>
-        </templates>
-    </settings>
-</filters> -->
