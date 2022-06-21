@@ -4,10 +4,6 @@ namespace AHT\SaleAgent\Block\Account\Dashboard;
 
 class ProductAssigned extends \Magento\Framework\View\Element\Template
 {
-    /**
-     * Limit of orders
-     */
-    const PRODUCT_LIMIT = 5;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory

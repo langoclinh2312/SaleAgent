@@ -157,27 +157,11 @@ class OrderSaleAgent extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Function getFormatedPercent
+     * Function convertQty
      *
-     * @param float $price
+     * @param float $qty
      *
-     * @return boolean
-     */
-    function checkTypeCommission($commissionType)
-    {
-        if ($commissionType == 'percent') {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Function exchangePercent
-     *
-     * @param float $price
-     *
-     * @return float|null
+     * @return int|null
      */
     function convertQty($qty)
     {
