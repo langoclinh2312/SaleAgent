@@ -104,10 +104,9 @@ class ProductAssigned extends \Magento\Framework\View\Element\Template
      *
      * @return string
      */
-    function getFormatedPercent($commissionValue, $productPrice)
+    function getFormatedPercent($commissionValue)
     {
-        $price = ($productPrice * $commissionValue) / 100;
-        $priceFormat = number_format($commissionValue, 1) . '% =>' . $this->getFormatedPrice($price);
+        $priceFormat = number_format($commissionValue, 1) . '%';
         return $priceFormat;
     }
 
