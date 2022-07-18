@@ -73,4 +73,33 @@ class SaleAgent extends \Magento\Framework\View\Element\Template
     {
         return $this->_priceCurrency->convertAndFormat($price);
     }
+
+    /**
+     * Function getFormatedPercent
+     *
+     * @param float $price
+     *
+     * @return string
+     */
+    function getFormatedPercent($commissionValue)
+    {
+        $priceFormat = number_format($commissionValue, 1) . '%';
+        return $priceFormat;
+    }
+
+    /**
+     * Function getFormatedPercent
+     *
+     * @param float $price
+     *
+     * @return string
+     */
+    function checkTypeCommission($commissionType)
+    {
+        if ($commissionType == 'percent') {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
